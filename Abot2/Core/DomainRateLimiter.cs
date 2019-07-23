@@ -49,7 +49,7 @@ namespace Abot2.Core
         public void RateLimit(Uri uri)
         {
             if (uri == null)
-                throw new ArgumentNullException("uri");
+                throw new ArgumentNullException(nameof(uri));
 
             var rateLimiter = GetRateLimiter(uri, _defaultMinCrawlDelayInMillisecs);
             if (rateLimiter == null)
@@ -66,7 +66,7 @@ namespace Abot2.Core
         public void AddDomain(Uri uri, long minCrawlDelayInMillisecs)
         {
             if (uri == null)
-                throw new ArgumentNullException("uri");
+                throw new ArgumentNullException(nameof(uri));
 
             if (minCrawlDelayInMillisecs < 1)
                 throw new ArgumentException("minCrawlDelayInMillisecs");
@@ -77,7 +77,7 @@ namespace Abot2.Core
         public void AddOrUpdateDomain(Uri uri, long minCrawlDelayInMillisecs)
         {
             if (uri == null)
-                throw new ArgumentNullException("uri");
+                throw new ArgumentNullException(nameof(uri));
 
             if (minCrawlDelayInMillisecs < 1)
                 throw new ArgumentException("minCrawlDelayInMillisecs");

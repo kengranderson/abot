@@ -48,7 +48,7 @@ namespace Abot2.Core
             if(pageToCrawl.CrawlDepth > crawlContext.CrawlConfiguration.MaxCrawlDepth)
                 return new CrawlDecision { Allow = false, Reason = "Crawl depth is above max" };
 
-            if (!pageToCrawl.Uri.Scheme.StartsWith("http"))
+            if (!pageToCrawl.Uri.Scheme.StartsWith("http", StringComparison.InvariantCultureIgnoreCase))
                 return new CrawlDecision { Allow = false, Reason = "Scheme does not begin with http" };
 
             //TODO Do we want to ignore redirect chains (ie.. do not treat them as seperate page crawls)?

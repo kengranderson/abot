@@ -69,7 +69,7 @@ namespace Abot2.Core
         protected virtual void CheckParams(CrawledPage crawledPage)
         {
             if (crawledPage == null)
-                throw new ArgumentNullException("crawledPage");
+                throw new ArgumentNullException(nameof(crawledPage));
         }
 
         protected virtual List<Uri> GetUris(CrawledPage crawledPage, IEnumerable<string> hrefValues)
@@ -87,7 +87,7 @@ namespace Abot2.Core
             var baseHref = GetBaseHrefValue(crawledPage);
             if (!string.IsNullOrEmpty(baseHref))
             {
-                if (baseHref.StartsWith("//"))
+                if (baseHref.StartsWith("//", StringComparison.InvariantCultureIgnoreCase))
                     baseHref = crawledPage.Uri.Scheme + ":" + baseHref;
 
                 try
