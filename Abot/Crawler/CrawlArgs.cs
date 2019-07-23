@@ -10,10 +10,7 @@ namespace Abot.Crawler
 
         public CrawlArgs(CrawlContext crawlContext)
         {
-            if (crawlContext == null)
-                throw new ArgumentNullException("crawlContext");
-
-            CrawlContext = crawlContext;
+            CrawlContext = crawlContext ?? throw new ArgumentNullException("crawlContext");
         }
     }
 }

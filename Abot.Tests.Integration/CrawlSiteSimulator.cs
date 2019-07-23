@@ -29,9 +29,11 @@ namespace Abot.Tests.Integration
         public void Crawl_MaxPagesTo5_OnlyCrawls5Pages()
         {
             new PageRequester(new CrawlConfiguration{ UserAgentString = "aaa" }).MakeRequest(new Uri("http://localhost.fiddler:1111/PageGenerator/ClearCounters"));
-            
-            CrawlConfiguration configuration = new CrawlConfiguration();
-            configuration.MaxPagesToCrawl = 5;
+
+            CrawlConfiguration configuration = new CrawlConfiguration
+            {
+                MaxPagesToCrawl = 5
+            };
 
             int pagesCrawledCount = 0;
 
@@ -48,8 +50,10 @@ namespace Abot.Tests.Integration
         {
             new PageRequester(new CrawlConfiguration { UserAgentString = "aaa" }).MakeRequest(new Uri("http://localhost.fiddler:1111/PageGenerator/ClearCounters"));
 
-            CrawlConfiguration configuration = new CrawlConfiguration();
-            configuration.MaxPagesToCrawl = 25;
+            CrawlConfiguration configuration = new CrawlConfiguration
+            {
+                MaxPagesToCrawl = 25
+            };
 
             int pagesCrawledCount = 0;
 
@@ -66,9 +70,11 @@ namespace Abot.Tests.Integration
         {
             new PageRequester(new CrawlConfiguration{ UserAgentString = "aaa" }).MakeRequest(new Uri("http://localhost.fiddler:1111/PageGenerator/ClearCounters"));
 
-            CrawlConfiguration configuration = new CrawlConfiguration();
-            configuration.MinCrawlDelayPerDomainMilliSeconds = 1000; //adding delay since it increases the chance of issues with abot crawling more than MaxPagesToCrawl.
-            configuration.MaxPagesToCrawl = 5;
+            CrawlConfiguration configuration = new CrawlConfiguration
+            {
+                MinCrawlDelayPerDomainMilliSeconds = 1000, //adding delay since it increases the chance of issues with abot crawling more than MaxPagesToCrawl.
+                MaxPagesToCrawl = 5
+            };
 
             int pagesCrawledCount = 0;
 
@@ -83,8 +89,10 @@ namespace Abot.Tests.Integration
         [Test]
         public void Crawl_CrawlTimeoutIs1Sec_TimesOut()
         {
-            CrawlConfiguration configuration = new CrawlConfiguration();
-            configuration.CrawlTimeoutSeconds = 2;
+            CrawlConfiguration configuration = new CrawlConfiguration
+            {
+                CrawlTimeoutSeconds = 2
+            };
 
             int pagesCrawledCount = 0;
 
@@ -144,10 +152,12 @@ namespace Abot.Tests.Integration
         {
             new PageRequester(new CrawlConfiguration { UserAgentString = "aaa" }).MakeRequest(new Uri("http://localhost.fiddler:1111/PageGenerator/ClearCounters"));
 
-            CrawlConfiguration configuration = new CrawlConfiguration();
-            configuration.MaxPagesToCrawl = 3;
-            configuration.MinCrawlDelayPerDomainMilliSeconds = 1000; // 1 second * 2 pages = 2 (or more) seconds
-            
+            CrawlConfiguration configuration = new CrawlConfiguration
+            {
+                MaxPagesToCrawl = 3,
+                MinCrawlDelayPerDomainMilliSeconds = 1000 // 1 second * 2 pages = 2 (or more) seconds
+            };
+
             int pagesCrawledCount = 0;
 
             var crawler = new PoliteWebCrawler(configuration);

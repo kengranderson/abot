@@ -131,10 +131,9 @@ namespace Abot2.Core
             //X-Robots-Tag http header
             if(Config.IsRespectHttpXRobotsTagHeaderNoFollowEnabled)
             {
-                IEnumerable<string> xRobotsTagHeaderValues;
-                if (!crawledPage.HttpResponseMessage.Headers.TryGetValues("X-Robots-Tag", out xRobotsTagHeaderValues))
+                if (!crawledPage.HttpResponseMessage.Headers.TryGetValues("X-Robots-Tag", out IEnumerable<string> xRobotsTagHeaderValues))
                     return false;
-                
+
                 var xRobotsTagHeader = xRobotsTagHeaderValues.ElementAt(0);
                 if (xRobotsTagHeader != null && 
                     (xRobotsTagHeader.ToLower().Contains("nofollow") ||

@@ -11,10 +11,7 @@ namespace Abot.Crawler
         public PageCrawlStartingArgs(CrawlContext crawlContext, PageToCrawl pageToCrawl)
             : base(crawlContext)
         {
-            if (pageToCrawl == null)
-                throw new ArgumentNullException("pageToCrawl");
-
-            PageToCrawl = pageToCrawl;
+            PageToCrawl = pageToCrawl ?? throw new ArgumentNullException("pageToCrawl");
         }
     }
 }

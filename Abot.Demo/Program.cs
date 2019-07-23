@@ -23,10 +23,10 @@ namespace Abot.Demo
 
             //Subscribe to any of these asynchronous events, there are also sychronous versions of each.
             //This is where you process data about specific events of the crawl
-            crawler.PageCrawlStartingAsync += crawler_ProcessPageCrawlStarting;
-            crawler.PageCrawlCompletedAsync += crawler_ProcessPageCrawlCompleted;
-            crawler.PageCrawlDisallowedAsync += crawler_PageCrawlDisallowed;
-            crawler.PageLinksCrawlDisallowedAsync += crawler_PageLinksCrawlDisallowed;
+            crawler.PageCrawlStartingAsync += Crawler_ProcessPageCrawlStarting;
+            crawler.PageCrawlCompletedAsync += Crawler_ProcessPageCrawlCompleted;
+            crawler.PageCrawlDisallowedAsync += Crawler_PageCrawlDisallowed;
+            crawler.PageLinksCrawlDisallowedAsync += Crawler_PageLinksCrawlDisallowed;
 
             //Start the crawl
             //This is a synchronous call
@@ -44,20 +44,24 @@ namespace Abot.Demo
             return new PoliteWebCrawler();
         }
 
+#pragma warning disable IDE0051 // Remove unused private members
         private static IWebCrawler GetManuallyConfiguredWebCrawler()
+#pragma warning restore IDE0051 // Remove unused private members
         {
             //Create a config object manually
-            CrawlConfiguration config = new CrawlConfiguration();
-            config.CrawlTimeoutSeconds = 0;
-            config.DownloadableContentTypes = "text/html, text/plain";
-            config.IsExternalPageCrawlingEnabled = false;
-            config.IsExternalPageLinksCrawlingEnabled = false;
-            config.IsRespectRobotsDotTextEnabled = false;
-            config.IsUriRecrawlingEnabled = false;
-            config.MaxConcurrentThreads = 10;
-            config.MaxPagesToCrawl = 10;
-            config.MaxPagesToCrawlPerDomain = 0;
-            config.MinCrawlDelayPerDomainMilliSeconds = 1000;
+            CrawlConfiguration config = new CrawlConfiguration
+            {
+                CrawlTimeoutSeconds = 0,
+                DownloadableContentTypes = "text/html, text/plain",
+                IsExternalPageCrawlingEnabled = false,
+                IsExternalPageLinksCrawlingEnabled = false,
+                IsRespectRobotsDotTextEnabled = false,
+                IsUriRecrawlingEnabled = false,
+                MaxConcurrentThreads = 10,
+                MaxPagesToCrawl = 10,
+                MaxPagesToCrawlPerDomain = 0,
+                MinCrawlDelayPerDomainMilliSeconds = 1000
+            };
 
             //Add you own values without modifying Abot's source code.
             //These are accessible in CrawlContext.CrawlConfuration.ConfigurationException object throughout the crawl
@@ -69,7 +73,9 @@ namespace Abot.Demo
             return new PoliteWebCrawler(config, null, null, null, null, null, null, null, null);
         }
 
+#pragma warning disable IDE0051 // Remove unused private members
         private static IWebCrawler GetCustomBehaviorUsingLambdaWebCrawler()
+#pragma warning restore IDE0051 // Remove unused private members
         {
             IWebCrawler crawler = GetDefaultWebCrawler();
 
@@ -111,7 +117,7 @@ namespace Abot.Demo
 
         private static Uri GetSiteToCrawl(string[] args)
         {
-            string userInput = "";
+            string userInput;
             if (args.Length < 1)
             {
                 System.Console.WriteLine("Please enter ABSOLUTE url to crawl:");
@@ -141,22 +147,22 @@ namespace Abot.Demo
             System.Console.ForegroundColor = originalColor;
         }
 
-        static void crawler_ProcessPageCrawlStarting(object sender, PageCrawlStartingArgs e)
+        static void Crawler_ProcessPageCrawlStarting(object sender, PageCrawlStartingArgs e)
         {
             //Process data
         }
 
-        static void crawler_ProcessPageCrawlCompleted(object sender, PageCrawlCompletedArgs e)
+        static void Crawler_ProcessPageCrawlCompleted(object sender, PageCrawlCompletedArgs e)
         {
             //Process data
         }
 
-        static void crawler_PageLinksCrawlDisallowed(object sender, PageLinksCrawlDisallowedArgs e)
+        static void Crawler_PageLinksCrawlDisallowed(object sender, PageLinksCrawlDisallowedArgs e)
         {
             //Process data
         }
 
-        static void crawler_PageCrawlDisallowed(object sender, PageCrawlDisallowedArgs e)
+        static void Crawler_PageCrawlDisallowed(object sender, PageCrawlDisallowedArgs e)
         {
             //Process data
         }

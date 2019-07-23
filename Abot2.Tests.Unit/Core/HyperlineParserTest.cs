@@ -12,7 +12,7 @@ namespace Abot2.Tests.Unit.Core
     public abstract class HyperLinkParserTest
     {
         HyperLinkParser _unitUnderTest;
-        Uri _uri = new Uri("http://a.com/");
+        readonly Uri _uri = new Uri("http://a.com/");
         CrawledPage _crawledPage;
 
         protected abstract HyperLinkParser GetInstance(bool isRespectMetaRobotsNoFollowEnabled, bool isRespectAnchorRelNoFollowEnabled, Func<string, string> cleanUrlDelegate, bool isRespectUrlNamedAnchorOrHashbangEnabled, bool isRespectHttpXRobotsTagHeaderNoFollow);
@@ -20,11 +20,12 @@ namespace Abot2.Tests.Unit.Core
         [TestInitialize]
         public void Init()
         {
-            _crawledPage = new CrawledPage(_uri);
-            
-            _crawledPage.ParentUri = _uri;
-            _crawledPage.HttpRequestMessage = new HttpRequestMessage(HttpMethod.Get, _uri);
-            _crawledPage.HttpResponseMessage = new HttpResponseMessage();
+            _crawledPage = new CrawledPage(_uri)
+            {
+                ParentUri = _uri,
+                HttpRequestMessage = new HttpRequestMessage(HttpMethod.Get, _uri),
+                HttpResponseMessage = new HttpResponseMessage()
+            };
 
             _unitUnderTest = GetInstance(false, false, null, false, false);
         }

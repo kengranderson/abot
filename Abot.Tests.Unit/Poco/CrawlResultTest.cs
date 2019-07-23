@@ -32,8 +32,10 @@ namespace Abot.Tests.Unit.Poco
         [Test]
         public void ErrorOccurred_ErrorExceptionIsNull_ReturnsFalse()
         {
-            CrawlResult unitUnderTest = new CrawlResult();
-            unitUnderTest.ErrorException = null;
+            CrawlResult unitUnderTest = new CrawlResult
+            {
+                ErrorException = null
+            };
 
             Assert.IsFalse(unitUnderTest.ErrorOccurred);
             Assert.IsNull(unitUnderTest.ErrorException);

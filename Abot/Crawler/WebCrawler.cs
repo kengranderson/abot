@@ -105,7 +105,7 @@ namespace Abot.Crawler
     [Serializable]
     public abstract class WebCrawler : IWebCrawler
     {
-        static ILog _logger = LogManager.GetLogger("AbotLogger");
+        static readonly ILog _logger = LogManager.GetLogger("AbotLogger");
         protected bool _crawlComplete = false;
         protected bool _crawlStopReported = false;
         protected bool _crawlCancellationReported = false;
@@ -183,8 +183,10 @@ namespace Abot.Crawler
             IHyperLinkParser hyperLinkParser,
             IMemoryManager memoryManager)
         {
-            _crawlContext = new CrawlContext();
-            _crawlContext.CrawlConfiguration = crawlConfiguration ?? GetCrawlConfigurationFromConfigFile();
+            _crawlContext = new CrawlContext
+            {
+                CrawlConfiguration = crawlConfiguration ?? GetCrawlConfigurationFromConfigFile()
+            };
             CrawlBag = _crawlContext.CrawlBag;
 
             _threadManager = threadManager ?? new TaskThreadManager(_crawlContext.CrawlConfiguration.MaxConcurrentThreads > 0 ? _crawlContext.CrawlConfiguration.MaxConcurrentThreads : Environment.ProcessorCount);
@@ -224,9 +226,11 @@ namespace Abot.Crawler
             if (cancellationTokenSource != null)
                 _crawlContext.CancellationTokenSource = cancellationTokenSource;
 
-            _crawlResult = new CrawlResult();
-            _crawlResult.RootUri = _crawlContext.RootUri;
-            _crawlResult.CrawlContext = _crawlContext;
+            _crawlResult = new CrawlResult
+            {
+                RootUri = _crawlContext.RootUri,
+                CrawlContext = _crawlContext
+            };
             _crawlComplete = false;
 
             _logger.InfoFormat("About to crawl site [{0}]", uri.AbsoluteUri);
@@ -312,9 +316,7 @@ namespace Abot.Crawler
         {
             try
             {
-                EventHandler<PageCrawlStartingArgs> threadSafeEvent = PageCrawlStarting;
-                if (threadSafeEvent != null)
-                    threadSafeEvent(this, new PageCrawlStartingArgs(_crawlContext, pageToCrawl));
+                PageCrawlStarting?.Invoke(this, new PageCrawlStartingArgs(_crawlContext, pageToCrawl));
             }
             catch (Exception e)
             {
@@ -327,9 +329,7 @@ namespace Abot.Crawler
         {
             try
             {
-                EventHandler<PageCrawlCompletedArgs> threadSafeEvent = PageCrawlCompleted;
-                if (threadSafeEvent != null)
-                    threadSafeEvent(this, new PageCrawlCompletedArgs(_crawlContext, crawledPage));
+                PageCrawlCompleted?.Invoke(this, new PageCrawlCompletedArgs(_crawlContext, crawledPage));
             }
             catch (Exception e)
             {
@@ -342,9 +342,7 @@ namespace Abot.Crawler
         {
             try
             {
-                EventHandler<PageCrawlDisallowedArgs> threadSafeEvent = PageCrawlDisallowed;
-                if (threadSafeEvent != null)
-                    threadSafeEvent(this, new PageCrawlDisallowedArgs(_crawlContext, pageToCrawl, reason));
+                PageCrawlDisallowed?.Invoke(this, new PageCrawlDisallowedArgs(_crawlContext, pageToCrawl, reason));
             }
             catch (Exception e)
             {
@@ -357,9 +355,7 @@ namespace Abot.Crawler
         {
             try
             {
-                EventHandler<PageLinksCrawlDisallowedArgs> threadSafeEvent = PageLinksCrawlDisallowed;
-                if (threadSafeEvent != null)
-                    threadSafeEvent(this, new PageLinksCrawlDisallowedArgs(_crawlContext, crawledPage, reason));
+                PageLinksCrawlDisallowed?.Invoke(this, new PageLinksCrawlDisallowedArgs(_crawlContext, crawledPage, reason));
             }
             catch (Exception e)
             {
@@ -643,8 +639,7 @@ namespace Abot.Crawler
 
         protected virtual void HandleCrawlTimeout(object sender, ElapsedEventArgs e)
         {
-            Timer elapsedTimer = sender as Timer;
-            if (elapsedTimer != null)
+            if (sender is Timer elapsedTimer)
                 elapsedTimer.Stop();
 
             _logger.InfoFormat("Crawl timeout of [{0}] seconds has been reached for [{1}]", _crawlContext.CrawlConfiguration.CrawlTimeoutSeconds, _crawlContext.RootUri);
@@ -722,13 +717,15 @@ namespace Abot.Crawler
             {
                 var uri = ExtractRedirectUri(crawledPage);
 
-                PageToCrawl page = new PageToCrawl(uri);
-                page.ParentUri = crawledPage.ParentUri;
-                page.CrawlDepth = crawledPage.CrawlDepth;
-                page.IsInternal = IsInternalUri(uri);
-                page.IsRoot = false;
-                page.RedirectedFrom = crawledPage;
-                page.RedirectPosition = crawledPage.RedirectPosition + 1;
+                PageToCrawl page = new PageToCrawl(uri)
+                {
+                    ParentUri = crawledPage.ParentUri,
+                    CrawlDepth = crawledPage.CrawlDepth,
+                    IsInternal = IsInternalUri(uri),
+                    IsRoot = false,
+                    RedirectedFrom = crawledPage,
+                    RedirectPosition = crawledPage.RedirectPosition + 1
+                };
 
                 crawledPage.RedirectedTo = page;
                 _logger.DebugFormat("Page [{0}] is requesting that it be redirect to [{1}]", crawledPage.Uri, crawledPage.RedirectedTo.Uri);
@@ -848,13 +845,11 @@ namespace Abot.Crawler
                     if (!String.IsNullOrEmpty(value))
                     {
                         // Try to convert to DateTime first, then in double.
-                        DateTime date;
-                        double seconds;
-                        if (crawledPage.LastRequest.HasValue && DateTime.TryParse(value, out date))
+                        if (crawledPage.LastRequest.HasValue && DateTime.TryParse(value, out DateTime date))
                         {
                             crawledPage.RetryAfter = (date - crawledPage.LastRequest.Value).TotalSeconds;
-                        } 
-                        else if (double.TryParse(value, out seconds))
+                        }
+                        else if (double.TryParse(value, out double seconds))
                         {
                             crawledPage.RetryAfter = seconds;
                         }
@@ -947,11 +942,13 @@ namespace Abot.Crawler
                 {
                     try //Added due to a bug in the Uri class related to this (http://stackoverflow.com/questions/2814951/system-uriformatexception-invalid-uri-the-hostname-could-not-be-parsed)
                     {
-                        PageToCrawl page = new PageToCrawl(uri);
-                        page.ParentUri = crawledPage.Uri;
-                        page.CrawlDepth = crawledPage.CrawlDepth + 1;
-                        page.IsInternal = IsInternalUri(uri);
-                        page.IsRoot = false;
+                        PageToCrawl page = new PageToCrawl(uri)
+                        {
+                            ParentUri = crawledPage.Uri,
+                            CrawlDepth = crawledPage.CrawlDepth + 1,
+                            IsInternal = IsInternalUri(uri),
+                            IsRoot = false
+                        };
 
                         if (ShouldSchedulePageLink(page))
                         {

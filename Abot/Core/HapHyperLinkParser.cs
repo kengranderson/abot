@@ -73,14 +73,12 @@ namespace Abot.Core
 
             if (nodes == null)
                 return hrefs;
-
-            string hrefValue = "";
             foreach (HtmlNode node in nodes)
             {
                 if (HasRelNoFollow(node))
                     continue;
 
-                hrefValue = node.Attributes["href"].Value;
+                string hrefValue = node.Attributes["href"].Value;
                 if (!string.IsNullOrWhiteSpace(hrefValue))
                 {
                     hrefValue = DeEntitize(hrefValue);

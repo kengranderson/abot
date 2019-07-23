@@ -125,10 +125,11 @@ namespace Abot2.Core
 
         protected virtual HttpRequestMessage BuildHttpRequestMessage(Uri uri)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, uri);
-            
-            request.Version = GetEquivalentHttpProtocolVersion();
-            
+            var request = new HttpRequestMessage(HttpMethod.Get, uri)
+            {
+                Version = GetEquivalentHttpProtocolVersion()
+            };
+
             return request;
         }
 
@@ -180,9 +181,11 @@ namespace Abot2.Core
             {
                 //Added to handle redirects clearing auth headers which result in 401...
                 //https://stackoverflow.com/questions/13159589/how-to-handle-authenticatication-with-httpwebrequest-allowautoredirect
-                var cache = new CredentialCache();
-                cache.Add(new Uri($"http://{rootUri.Host}"), "Basic", new NetworkCredential(_config.LoginUser, _config.LoginPassword));
-                cache.Add(new Uri($"https://{rootUri.Host}"), "Basic", new NetworkCredential(_config.LoginUser, _config.LoginPassword));
+                var cache = new CredentialCache
+                {
+                    { new Uri($"http://{rootUri.Host}"), "Basic", new NetworkCredential(_config.LoginUser, _config.LoginPassword) },
+                    { new Uri($"https://{rootUri.Host}"), "Basic", new NetworkCredential(_config.LoginUser, _config.LoginPassword) }
+                };
 
                 httpClientHandler.Credentials = cache;
             }

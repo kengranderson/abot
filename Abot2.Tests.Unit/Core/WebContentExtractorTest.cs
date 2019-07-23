@@ -10,7 +10,7 @@ namespace Abot2.Tests.Unit.Core
     public class WebContentExtractorTest
     {
         WebContentExtractor _uut;
-        string _contentString = "<!DOCTYPE html>\r\n<html>\r\n<head>\r\nblahblahblah"; 
+        readonly string _contentString = "<!DOCTYPE html>\r\n<html>\r\n<head>\r\nblahblahblah"; 
 
         const string JapaneseCharset = "Shift_JIS";
         const string JapaneseEncodingString = "System.Text.UTF8Encoding+UTF8EncodingSealed";
@@ -157,7 +157,9 @@ namespace Abot2.Tests.Unit.Core
             Assert.IsTrue(result.Text.StartsWith(_contentString));
         }
 
+#pragma warning disable IDE0060 // Remove unused parameter
         private void MakeCommonAssertions(PageContent result, string expectedCharset, string expectedEncodingString = JapaneseEncodingString)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             Assert.IsNotNull(result.Bytes);
             Assert.AreNotEqual(0, result.Bytes.Length);

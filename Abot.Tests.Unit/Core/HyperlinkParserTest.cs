@@ -14,7 +14,7 @@ namespace Abot.Tests.Unit.Core
     public abstract class HyperLinkParserTest
     {
         HyperLinkParser _unitUnderTest;
-        Uri _uri = new Uri("http://a.com/");
+        readonly Uri _uri = new Uri("http://a.com/");
         CrawledPage _crawledPage;
 
         protected abstract HyperLinkParser GetInstance(bool isRespectMetaRobotsNoFollowEnabled, bool isRespectAnchorRelNoFollowEnabled, Func<string, string> cleanUrlDelegate, bool isRespectUrlNamedAnchorOrHashbangEnabled, bool isRespectHttpXRobotsTagHeaderNoFollow);

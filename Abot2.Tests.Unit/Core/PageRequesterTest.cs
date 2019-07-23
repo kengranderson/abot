@@ -14,9 +14,8 @@ namespace Abot2.Tests.Unit.Core
     public class PageRequesterTest
     {
         PageRequester _unitUnderTest;
-        Uri _validUri = new Uri("http://aaa.com/");
-
-        CrawlConfiguration _crawlConfig = new CrawlConfiguration();
+        readonly Uri _validUri = new Uri("http://aaa.com/");
+        readonly CrawlConfiguration _crawlConfig = new CrawlConfiguration();
         private Mock<IWebContentExtractor> _fakeWebContentExtractor;
         private Mock<HttpClient> _fakeHttpClient;
 

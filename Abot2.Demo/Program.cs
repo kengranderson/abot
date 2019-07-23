@@ -11,7 +11,7 @@ namespace Abot2.Demo
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static async Task Main()
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
@@ -49,7 +49,9 @@ namespace Abot2.Demo
             
         }
 
+#pragma warning disable IDE0051 // Remove unused private members
         private static async Task DemoPageRequester()
+#pragma warning restore IDE0051 // Remove unused private members
         {
             var pageRequester =
                 new PageRequester(new CrawlConfiguration(), new WebContentExtractor());

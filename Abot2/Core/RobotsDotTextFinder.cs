@@ -22,7 +22,7 @@ namespace Abot2.Core
 
     public class RobotsDotTextFinder : IRobotsDotTextFinder
     {
-        IPageRequester _pageRequester;
+        readonly IPageRequester _pageRequester;
 
         public RobotsDotTextFinder(IPageRequester pageRequester)
         {

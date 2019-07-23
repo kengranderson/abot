@@ -13,10 +13,7 @@ namespace Abot.Poco
 
         public PageToCrawl(Uri uri)
         {
-            if (uri == null)
-                throw new ArgumentNullException("uri");
-
-            Uri = uri;
+            Uri = uri ?? throw new ArgumentNullException("uri");
             PageBag = new ExpandoObject();
         }
 

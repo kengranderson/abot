@@ -221,11 +221,11 @@ namespace Abot.Util
 			unchecked
 			{
 				x = ~x + (x << 15); // x = (x << 15) - x- 1, as (~x) + y is equivalent to y - x - 1 in two's complement representation
-				x = x ^ (x >> 12);
-				x = x + (x << 2);
-				x = x ^ (x >> 4);
-				x = x * 2057; // x = (x + (x << 3)) + (x<< 11);
-				x = x ^ (x >> 16);
+				x ^= (x >> 12);
+				x += (x << 2);
+				x ^= (x >> 4);
+				x *= 2057; // x = (x + (x << 3)) + (x<< 11);
+				x ^= (x >> 16);
 				return (int)x;
 			}
 		}

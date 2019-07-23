@@ -17,7 +17,7 @@ namespace Abot.Core
     [Serializable]
     public class WebContentExtractor : IWebContentExtractor
     {
-        static ILog _logger = LogManager.GetLogger("AbotLogger");
+        static readonly ILog _logger = LogManager.GetLogger("AbotLogger");
 
         public virtual PageContent GetContent(WebResponse response)
         {
@@ -43,11 +43,13 @@ namespace Abot.Core
                     content = sr.ReadToEnd();
                 }
 
-                PageContent pageContent = new PageContent();
-                pageContent.Bytes = memoryStream.ToArray();
-                pageContent.Charset = charset;
-                pageContent.Encoding = e;
-                pageContent.Text = content;
+                PageContent pageContent = new PageContent
+                {
+                    Bytes = memoryStream.ToArray(),
+                    Charset = charset,
+                    Encoding = e,
+                    Text = content
+                };
 
                 return pageContent;
             }

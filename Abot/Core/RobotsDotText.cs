@@ -30,19 +30,18 @@ namespace Abot.Core
     [Serializable]
     public class RobotsDotText : IRobotsDotText
     {
-        ILog _logger = LogManager.GetLogger("AbotLogger");
+#pragma warning disable IDE0052 // Remove unread private members
+        readonly ILog _logger = LogManager.GetLogger("AbotLogger");
+#pragma warning restore IDE0052 // Remove unread private members
         IRobots _robotsDotTextUtil = null;
-        Uri _rootUri = null;
+        readonly Uri _rootUri = null;
 
         public RobotsDotText(Uri rootUri, string content)
         {
-            if (rootUri == null)
-                throw new ArgumentNullException("rootUri");
-
             if (content == null)
                 throw new ArgumentNullException("content");
 
-            _rootUri = rootUri;
+            _rootUri = rootUri ?? throw new ArgumentNullException("rootUri");
             Load(rootUri, content);           
         }
 

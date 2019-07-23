@@ -11,7 +11,9 @@ namespace Abot2.Tests.Unit.Crawler
         [TestMethod]
         public void Constructor_ValidArg_SetsPublicProperty()
         {
+#pragma warning disable IDE0059 // Value assigned to symbol is never used
             CrawledPage page = new CrawledPage(new Uri("http://aaa.com/"));
+#pragma warning restore IDE0059 // Value assigned to symbol is never used
             CrawlContext context = new CrawlContext();
             CrawlArgs args = new CrawlArgs(context);
 

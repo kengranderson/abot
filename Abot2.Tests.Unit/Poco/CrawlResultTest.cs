@@ -11,7 +11,7 @@ namespace Abot2.Tests.Unit.Poco
         public void Constructor_ValidUri_CreatesInstance()
         {
             var unitUnderTest = new CrawlResult();
-            Assert.AreEqual(default(TimeSpan), unitUnderTest.Elapsed);
+            Assert.AreEqual(default, unitUnderTest.Elapsed);
             Assert.AreEqual(null, unitUnderTest.ErrorException);
             Assert.AreEqual(false, unitUnderTest.ErrorOccurred);
             Assert.AreEqual(null, unitUnderTest.RootUri);
@@ -32,8 +32,10 @@ namespace Abot2.Tests.Unit.Poco
         [TestMethod]
         public void ErrorOccurred_ErrorExceptionIsNull_ReturnsFalse()
         {
-            var unitUnderTest = new CrawlResult();
-            unitUnderTest.ErrorException = null;
+            var unitUnderTest = new CrawlResult
+            {
+                ErrorException = null
+            };
 
             Assert.IsFalse(unitUnderTest.ErrorOccurred);
             Assert.IsNull(unitUnderTest.ErrorException);

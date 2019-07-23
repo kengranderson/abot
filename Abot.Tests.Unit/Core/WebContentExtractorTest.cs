@@ -12,11 +12,11 @@ namespace Abot.Tests.Unit.Core
     public class WebContentExtractorTest
     {
         WebContentExtractor _uut;
-        Uri _utf8 = new Uri("http://localhost.fiddler:1111/");
-        Uri _japan = new Uri("http://aaa.jp");
-        Uri _japanMetaSingleQuotes = new Uri("http://aaa2.jp");
-        Uri _japanMetaDoubleQuotesAndClose = new Uri("http://aaa3.jp");
-        Uri _japanMetaSingleQuotesAndClose = new Uri("http://aaa4.jp");
+        readonly Uri _utf8 = new Uri("http://localhost.fiddler:1111/");
+        readonly Uri _japan = new Uri("http://aaa.jp");
+        readonly Uri _japanMetaSingleQuotes = new Uri("http://aaa2.jp");
+        readonly Uri _japanMetaDoubleQuotesAndClose = new Uri("http://aaa3.jp");
+        readonly Uri _japanMetaSingleQuotesAndClose = new Uri("http://aaa4.jp");
 
         [SetUp]
         public void Setup()
@@ -133,7 +133,7 @@ namespace Abot.Tests.Unit.Core
     class TestWebRequestCreate : IWebRequestCreate
     {
         static WebRequest nextRequest;
-        static object lockObject = new object();
+        static readonly object lockObject = new object();
 
         static public WebRequest NextRequest
         {
@@ -166,8 +166,8 @@ namespace Abot.Tests.Unit.Core
 
     class TestWebRequest : WebRequest
     {
-        MemoryStream requestStream = new MemoryStream();
-        MemoryStream responseStream;
+        readonly MemoryStream requestStream = new MemoryStream();
+        readonly MemoryStream responseStream;
 
         public override string Method { get; set; }
         public override string ContentType { get; set; }
@@ -201,8 +201,8 @@ namespace Abot.Tests.Unit.Core
 
     class TestWebReponse : WebResponse
     {
-        Stream responseStream;
-        WebHeaderCollection headers;
+        readonly Stream responseStream;
+        readonly WebHeaderCollection headers;
         public override WebHeaderCollection Headers { get { return headers; } }
 
         /// <summary>Initializes a new instance of <see cref="TestWebReponse"/> 

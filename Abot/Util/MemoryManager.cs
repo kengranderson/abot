@@ -23,15 +23,12 @@ namespace Abot.Util
     [Serializable]
     public class MemoryManager : IMemoryManager
     {
-        static ILog _logger = LogManager.GetLogger("AbotLogger");
-        IMemoryMonitor _memoryMonitor;
+        static readonly ILog _logger = LogManager.GetLogger("AbotLogger");
+        readonly IMemoryMonitor _memoryMonitor;
 
         public MemoryManager(IMemoryMonitor memoryMonitor)
         {
-            if (memoryMonitor == null)
-                throw new ArgumentNullException("memoryMonitor");
-
-            _memoryMonitor = memoryMonitor;
+            _memoryMonitor = memoryMonitor ?? throw new ArgumentNullException("memoryMonitor");
         }
 
         public virtual bool IsCurrentUsageAbove(int sizeInMb)

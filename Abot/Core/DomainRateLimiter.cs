@@ -35,9 +35,9 @@ namespace Abot.Core
     [Serializable]
     public class DomainRateLimiter : IDomainRateLimiter
     {
-        static ILog _logger = LogManager.GetLogger("AbotLogger");
+        static readonly ILog _logger = LogManager.GetLogger("AbotLogger");
         protected ConcurrentDictionary<string, IRateLimiter> _rateLimiterLookup = new ConcurrentDictionary<string, IRateLimiter>();
-        long _defaultMinCrawlDelayInMillisecs;
+        readonly long _defaultMinCrawlDelayInMillisecs;
 
         public DomainRateLimiter(long minCrawlDelayMillisecs)
         {
@@ -96,14 +96,14 @@ namespace Abot.Core
 
         public void RemoveDomain(Uri uri)
         {
-            IRateLimiter rateLimiter;
-            _rateLimiterLookup.TryRemove(uri.Authority, out rateLimiter);
+#pragma warning disable IDE0059 // Value assigned to symbol is never used
+            _rateLimiterLookup.TryRemove(uri.Authority, out IRateLimiter rateLimiter);
+#pragma warning restore IDE0059 // Value assigned to symbol is never used
         }
 
         protected virtual IRateLimiter GetRateLimiter(Uri uri, long minCrawlDelayInMillisecs)
         {
-            IRateLimiter rateLimiter;
-            _rateLimiterLookup.TryGetValue(uri.Authority, out rateLimiter);
+            _rateLimiterLookup.TryGetValue(uri.Authority, out IRateLimiter rateLimiter);
 
             if (rateLimiter == null && minCrawlDelayInMillisecs > 0)
             {

@@ -138,7 +138,7 @@ namespace Abot.Poco
         /// <summary>Gets the header with the given name.</summary>
         public string GetResponseHeader(string header)
         {
-            return Headers != null ? Headers[header] : null;
+            return Headers?[header];
         }
 
         #endregion

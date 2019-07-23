@@ -9,16 +9,15 @@ namespace Abot.Tests.Unit.Core
     public class PageRequesterTest
     {
         PageRequester _unitUnderTest;
-        Uri _validUri = new Uri("http://localhost.fiddler:1111/");
-        Uri _403ErrorUri = new Uri("http://localhost.fiddler:1111/HttpResponse/Status403");
-        Uri _404ErrorUri = new Uri("http://localhost.fiddler:1111/HttpResponse/Status404");
-        Uri _500ErrorUri = new Uri("http://localhost.fiddler:1111/HttpResponse/Status500");
-        Uri _502ErrorUri = new Uri("http://www.lakkjfkasdfjhqlkfj.com");//non resolvable
-        Uri _503ErrorUri = new Uri("http://localhost.fiddler:1111/HttpResponse/Status503");
-        Uri _301To200Uri = new Uri("http://localhost.fiddler:1111/HttpResponse/Redirect/?redirectHttpStatus=301&destinationHttpStatus=200");
-        Uri _301To404Uri = new Uri("http://localhost.fiddler:1111/HttpResponse/Redirect/?redirectHttpStatus=301&destinationHttpStatus=404");
-
-        CrawlConfiguration _crawlConfig = new CrawlConfiguration { UserAgentString = "someuseragentstringhere" };
+        readonly Uri _validUri = new Uri("http://localhost.fiddler:1111/");
+        readonly Uri _403ErrorUri = new Uri("http://localhost.fiddler:1111/HttpResponse/Status403");
+        readonly Uri _404ErrorUri = new Uri("http://localhost.fiddler:1111/HttpResponse/Status404");
+        readonly Uri _500ErrorUri = new Uri("http://localhost.fiddler:1111/HttpResponse/Status500");
+        readonly Uri _502ErrorUri = new Uri("http://www.lakkjfkasdfjhqlkfj.com");//non resolvable
+        readonly Uri _503ErrorUri = new Uri("http://localhost.fiddler:1111/HttpResponse/Status503");
+        readonly Uri _301To200Uri = new Uri("http://localhost.fiddler:1111/HttpResponse/Redirect/?redirectHttpStatus=301&destinationHttpStatus=200");
+        readonly Uri _301To404Uri = new Uri("http://localhost.fiddler:1111/HttpResponse/Redirect/?redirectHttpStatus=301&destinationHttpStatus=404");
+        readonly CrawlConfiguration _crawlConfig = new CrawlConfiguration { UserAgentString = "someuseragentstringhere" };
 
         [SetUp]
         public void SetUp()

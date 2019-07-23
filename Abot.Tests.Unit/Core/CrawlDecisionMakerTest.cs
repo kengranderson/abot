@@ -21,9 +21,11 @@ namespace Abot.Tests.Unit.Core
         public void SetUp()
         {
             _fakeScheduler = new Mock<IScheduler>();
-            _crawlContext = new CrawlContext();
-            _crawlContext.CrawlConfiguration = new CrawlConfiguration { UserAgentString = "aaa" };
-            _crawlContext.Scheduler = _fakeScheduler.Object;
+            _crawlContext = new CrawlContext
+            {
+                CrawlConfiguration = new CrawlConfiguration { UserAgentString = "aaa" },
+                Scheduler = _fakeScheduler.Object
+            };
             _unitUnderTest = new CrawlDecisionMaker();
         }
 
@@ -850,7 +852,9 @@ namespace Abot.Tests.Unit.Core
 
         }
 
+#pragma warning disable IDE0051 // Remove unused private members
         private HtmlDocument GetHtmlDocument(string html)
+#pragma warning restore IDE0051 // Remove unused private members
         {
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(html);

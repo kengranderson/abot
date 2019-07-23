@@ -22,14 +22,11 @@ namespace Abot2.Util
 
     public class MemoryManager : IMemoryManager
     {
-        IMemoryMonitor _memoryMonitor;
+        readonly IMemoryMonitor _memoryMonitor;
 
         public MemoryManager(IMemoryMonitor memoryMonitor)
         {
-            if (memoryMonitor == null)
-                throw new ArgumentNullException("memoryMonitor");
-
-            _memoryMonitor = memoryMonitor;
+            _memoryMonitor = memoryMonitor ?? throw new ArgumentNullException("memoryMonitor");
         }
 
         public virtual bool IsCurrentUsageAbove(int sizeInMb)

@@ -49,9 +49,9 @@ namespace Abot2.Core
 
     public class Scheduler : IScheduler
     {
-        ICrawledUrlRepository _crawledUrlRepo;
-        IPagesToCrawlRepository _pagesToCrawlRepo;
-        bool _allowUriRecrawling;
+        readonly ICrawledUrlRepository _crawledUrlRepo;
+        readonly IPagesToCrawlRepository _pagesToCrawlRepo;
+        readonly bool _allowUriRecrawling;
 
         public Scheduler()
             :this(false, null, null)

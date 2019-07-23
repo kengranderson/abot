@@ -10,10 +10,10 @@ namespace Abot2.Tests.Unit.Core
     public class RobotsDotTextTest
     {
         private RobotsDotText _unitUnderTest;
-        private Uri _rootUri = new Uri("http://www.spidertestsite1.com/");
+        private readonly Uri _rootUri = new Uri("http://www.spidertestsite1.com/");
         
-        private string _userAgentString = "Some User Agent...";
-        private string _robotsContent = @"
+        private readonly string _userAgentString = "Some User Agent...";
+        private readonly string _robotsContent = @"
 User-Agent: *
 Disallow: /disallowedfile.txt
 Disallow: /disallowedfolder

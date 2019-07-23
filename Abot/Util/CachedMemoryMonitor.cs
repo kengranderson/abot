@@ -7,20 +7,17 @@ namespace Abot.Util
     [Serializable]
     public class CachedMemoryMonitor : IMemoryMonitor, IDisposable
     {
-        static ILog _logger = LogManager.GetLogger("AbotLogger");
-        IMemoryMonitor _memoryMonitor;
-        Timer _usageRefreshTimer;
+        static readonly ILog _logger = LogManager.GetLogger("AbotLogger");
+        readonly IMemoryMonitor _memoryMonitor;
+        readonly Timer _usageRefreshTimer;
         int _cachedCurrentUsageInMb;
 
         public CachedMemoryMonitor(IMemoryMonitor memoryMonitor, int cacheExpirationInSeconds)
         {
-            if (memoryMonitor == null)
-                throw new ArgumentNullException("memoryMonitor");
-
             if (cacheExpirationInSeconds < 1)
                 cacheExpirationInSeconds = 5;
 
-            _memoryMonitor = memoryMonitor;
+            _memoryMonitor = memoryMonitor ?? throw new ArgumentNullException("memoryMonitor");
 
             UpdateCurrentUsageValue();
 

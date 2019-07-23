@@ -167,8 +167,7 @@ namespace Abot.Util
         {
             // While there are exit times that are passed due still in the queue,
             // exit the semaphore and dequeue the exit time.
-            int exitTime;
-            bool exitTimeValid = _exitTimes.TryPeek(out exitTime);
+            bool exitTimeValid = _exitTimes.TryPeek(out int exitTime);
             while (exitTimeValid)
             {
                 if (unchecked(exitTime - Environment.TickCount) > 0)
@@ -176,7 +175,9 @@ namespace Abot.Util
                     break;
                 }
                 _semaphore.Release();
+#pragma warning disable IDE0059 // Value assigned to symbol is never used
                 _exitTimes.TryDequeue(out exitTime);
+#pragma warning restore IDE0059 // Value assigned to symbol is never used
                 exitTimeValid = _exitTimes.TryPeek(out exitTime);
             }
 

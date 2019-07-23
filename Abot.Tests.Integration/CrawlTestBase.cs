@@ -12,10 +12,10 @@ namespace Abot.Tests.Integration
     [TestFixture]
     public abstract class CrawlTestBase
     {
-        static ILog _logger = LogManager.GetLogger("AbotLogger");
-        ConcurrentBag<PageResult> _actualCrawledPages = new ConcurrentBag<PageResult>();
-        int _maxSecondsToCrawl;
-        Uri _rootUri;
+        static readonly ILog _logger = LogManager.GetLogger("AbotLogger");
+        readonly ConcurrentBag<PageResult> _actualCrawledPages = new ConcurrentBag<PageResult>();
+        readonly int _maxSecondsToCrawl;
+        readonly Uri _rootUri;
 
         public CrawlTestBase(Uri rootUri, int maxSecondsToCrawl)
         {
@@ -25,7 +25,7 @@ namespace Abot.Tests.Integration
 
         public void CrawlAndAssert(IWebCrawler crawler)
         {
-            crawler.PageCrawlCompletedAsync += crawler_PageCrawlCompleted;
+            crawler.PageCrawlCompletedAsync += Crawler_PageCrawlCompleted;
 
             CrawlResult result = crawler.Crawl(_rootUri);
 
@@ -68,11 +68,13 @@ namespace Abot.Tests.Integration
             }
         }
 
-        private void crawler_PageCrawlCompleted(object sender, PageCrawlCompletedArgs e)
+        private void Crawler_PageCrawlCompleted(object sender, PageCrawlCompletedArgs e)
         {
-            PageResult pageResult = new PageResult();
-            pageResult.Url = e.CrawledPage.Uri.AbsoluteUri;
-            if(e.CrawledPage.HttpWebResponse != null)
+            PageResult pageResult = new PageResult
+            {
+                Url = e.CrawledPage.Uri.AbsoluteUri
+            };
+            if (e.CrawledPage.HttpWebResponse != null)
                 pageResult.HttpStatusCode = Convert.ToInt32(e.CrawledPage.HttpWebResponse.StatusCode);
 
             _actualCrawledPages.Add(pageResult);
@@ -147,8 +149,7 @@ namespace Abot.Tests.Integration
 
         public override bool Equals(object obj)
         {
-            PageResult other = obj as PageResult;
-            if(other == null)
+            if (!(obj is PageResult other))
                 return false;
 
             if (this.Url == other.Url && this.HttpStatusCode == other.HttpStatusCode)

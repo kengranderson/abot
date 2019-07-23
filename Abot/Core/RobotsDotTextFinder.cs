@@ -23,15 +23,12 @@ namespace Abot.Core
     [Serializable]
     public class RobotsDotTextFinder : IRobotsDotTextFinder
     {
-        static ILog _logger = LogManager.GetLogger("AbotLogger");
-        IPageRequester _pageRequester;
+        static readonly ILog _logger = LogManager.GetLogger("AbotLogger");
+        readonly IPageRequester _pageRequester;
 
         public RobotsDotTextFinder(IPageRequester pageRequester)
         {
-            if (pageRequester == null)
-                throw new ArgumentNullException("pageRequester");
-
-            _pageRequester = pageRequester;
+            _pageRequester = pageRequester ?? throw new ArgumentNullException("pageRequester");
         }
 
         public IRobotsDotText Find(Uri rootUri)

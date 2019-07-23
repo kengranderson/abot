@@ -12,7 +12,7 @@ namespace Abot.Util
     [Serializable]
     public class GcMemoryMonitor : IMemoryMonitor
     {
-        static ILog _logger = LogManager.GetLogger("AbotLogger");
+        static readonly ILog _logger = LogManager.GetLogger("AbotLogger");
 
         public virtual int GetCurrentUsageInMb()
         {

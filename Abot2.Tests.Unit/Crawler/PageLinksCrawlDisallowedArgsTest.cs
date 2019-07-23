@@ -8,8 +8,8 @@ namespace Abot2.Tests.Unit.Crawler
     [TestClass]
     public class PageLinksCrawlDisallowedArgsTest
     {
-        CrawledPage _page = new CrawledPage(new Uri("http://aaa.com/"));
-        CrawlContext _context = new CrawlContext();
+        readonly CrawledPage _page = new CrawledPage(new Uri("http://aaa.com/"));
+        readonly CrawlContext _context = new CrawlContext();
 
         [TestMethod]
         public void Constructor_ValidReason_SetsPublicProperty()

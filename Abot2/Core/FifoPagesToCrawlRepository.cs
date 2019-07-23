@@ -24,8 +24,7 @@ namespace Abot2.Core
 
         public PageToCrawl GetNext()
         {
-            PageToCrawl pageToCrawl;
-            UrlQueue.TryDequeue(out pageToCrawl);
+            UrlQueue.TryDequeue(out PageToCrawl pageToCrawl);
 
             return pageToCrawl;
         }

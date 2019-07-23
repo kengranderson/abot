@@ -34,7 +34,7 @@ namespace Abot.Util
     [Serializable]
     public abstract class ThreadManager : IThreadManager
     {
-        protected static ILog _logger = LogManager.GetLogger("AbotLogger");
+        protected static readonly ILog _logger = LogManager.GetLogger("AbotLogger");
         protected bool _abortAllCalled = false;
         protected int _numberOfRunningThreads = 0;
         protected ManualResetEvent _resetEvent = new ManualResetEvent(true);

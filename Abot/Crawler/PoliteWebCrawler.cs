@@ -29,7 +29,7 @@ namespace Abot.Crawler
     [Serializable]
     public class PoliteWebCrawler : WebCrawler, IPoliteWebCrawler
     {
-        private static ILog _logger = LogManager.GetLogger("AbotLogger");
+        private static readonly ILog _logger = LogManager.GetLogger("AbotLogger");
         protected IDomainRateLimiter _domainRateLimiter;
         protected IRobotsDotTextFinder _robotsDotTextFinder;
         protected IRobotsDotText _robotsDotText;
