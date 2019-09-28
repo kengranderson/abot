@@ -1,4 +1,5 @@
 ﻿using Abot2.Poco;
+using NLog;
 using System;
 using System.Collections.Generic;
 
@@ -49,6 +50,7 @@ namespace Abot2.Core
 
     public class Scheduler : IScheduler
     {
+        static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         readonly ICrawledUrlRepository _crawledUrlRepo;
         readonly IPagesToCrawlRepository _pagesToCrawlRepo;
         readonly bool _allowUriRecrawling;
@@ -78,11 +80,15 @@ namespace Abot2.Core
             if (_allowUriRecrawling || page.IsRetry)
             {
                 _pagesToCrawlRepo.Add(page);
+                _logger.Info($"Scheduled recrawled page {page.Uri.AbsolutePath}");
             }
             else
             {
                 if (_crawledUrlRepo.AddIfNew(page.Uri))
+                {
                     _pagesToCrawlRepo.Add(page);
+                    _logger.Info($"Scheduled new page {page.Uri.AbsolutePath}");
+                }
             }
         }
 
@@ -117,6 +123,7 @@ namespace Abot2.Core
 
         public void Dispose()
         {
+            _logger.Warn("Disposing of Scheduler");
             if (_crawledUrlRepo != null)
             {
                 _crawledUrlRepo.Dispose();

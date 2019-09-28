@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Abot2.Poco;
-using Serilog;
+using NLog;
 
 namespace Abot2.Core
 { 
@@ -24,8 +24,9 @@ namespace Abot2.Core
 
     public class PageRequester : IPageRequester
     {
+        protected static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly CrawlConfiguration _config;
-        private readonly IWebContentExtractor _contentExtractor;
+        protected readonly IWebContentExtractor _contentExtractor;
         private readonly CookieContainer _cookieContainer = new CookieContainer();
         private HttpClientHandler _httpClientHandler;
         private HttpClient _httpClient;
@@ -78,11 +79,11 @@ namespace Abot2.Core
             {
                 crawledPage.HttpRequestException = hre;
 
-                Log.Logger.Debug("Error occurred requesting url [{0}] {@Exception}", uri.AbsoluteUri, hre);
+                _logger.Debug($"Error occurred requesting url [{uri.AbsoluteUri}] {hre}");
             }
             catch (Exception e)
             {
-                Log.Logger.Debug("Error occurred requesting url [{0}] {@Exception}", uri.AbsoluteUri, e);
+                _logger.Debug($"Error occurred requesting url [{uri.AbsoluteUri}] {e}");
             }
             finally
             {
@@ -103,13 +104,13 @@ namespace Abot2.Core
                         }
                         else
                         {
-                            Log.Logger.Debug("Links on page [{0}] not crawled, [{1}]", crawledPage.Uri.AbsoluteUri, shouldDownloadContentDecision.Reason);
+                            _logger.Debug($"Links on page [{crawledPage.Uri.AbsoluteUri}] not crawled, [{shouldDownloadContentDecision.Reason}]");
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    Log.Logger.Debug("Error occurred finalizing requesting url [{0}] {@Exception}", uri.AbsoluteUri, e);
+                    _logger.Debug($"Error occurred finalizing requesting url [{uri.AbsoluteUri}] {e}");
                 }
             }
 

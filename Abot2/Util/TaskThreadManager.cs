@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Serilog;
+using NLog;
 
 namespace Abot2.Util
 {
@@ -57,9 +57,9 @@ namespace Abot2.Util
             foreach (var exception in aggException.InnerExceptions)
             {
                 if(_cancellationTokenSource.IsCancellationRequested)
-                    Log.Warning("CancellationRequested Aggregate Exception: {0}", exception);//If the task was cancelled then this exception is expected happen and we dont care
+                    _logger.Warn($"CancellationRequested Aggregate Exception: {exception}");//If the task was cancelled then this exception is expected happen and we dont care
                 else
-                    Log.Error("Aggregate Exception: {0}", exception);//If the task was not cancelled then this is an error
+                    _logger.Error($"Aggregate Exception: {exception}");//If the task was not cancelled then this is an error
             }
         }
     }

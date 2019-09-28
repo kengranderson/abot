@@ -6,7 +6,7 @@ using Robots;
 using Abot2.Util;
 using System.Threading;
 using System.Threading.Tasks;
-using Serilog;
+using NLog;
 
 namespace Abot2.Crawler
 {
@@ -84,13 +84,13 @@ namespace Abot2.Crawler
             {
                 if (robotsDotTextCrawlDelayInSecs > _crawlContext.CrawlConfiguration.MaxRobotsDotTextCrawlDelayInSeconds)
                 {
-                    Log.Warning("[{0}] robot.txt file directive [Crawl-delay: {1}] is above the value set in the config value MaxRobotsDotTextCrawlDelay, will use MaxRobotsDotTextCrawlDelay value instead.", uri, _crawlContext.CrawlConfiguration.MaxRobotsDotTextCrawlDelayInSeconds);
+                    _logger.Warn($"[{uri}] robot.txt file directive [Crawl-delay: {_crawlContext.CrawlConfiguration.MaxRobotsDotTextCrawlDelayInSeconds}] is above the value set in the config value MaxRobotsDotTextCrawlDelay, will use MaxRobotsDotTextCrawlDelay value instead.");
 
                     robotsDotTextCrawlDelayInSecs = _crawlContext.CrawlConfiguration.MaxRobotsDotTextCrawlDelayInSeconds;
                     robotsDotTextCrawlDelayInMillisecs = robotsDotTextCrawlDelayInSecs * 1000;
                 }
 
-                Log.Warning("[{0}] robot.txt file directive [Crawl-delay: {1}] will be respected.", uri, robotsDotTextCrawlDelayInSecs);
+                _logger.Warn($"[{uri}] robot.txt file directive [Crawl-delay: {robotsDotTextCrawlDelayInSecs}] will be respected.");
                 _domainRateLimiter.AddDomain(uri, robotsDotTextCrawlDelayInMillisecs);
             }
 
@@ -122,15 +122,15 @@ namespace Abot2.Crawler
             {
                 if (!allowedByRobots)
                 {
-                    var message = string.Format("Page [{0}] [Disallowed by robots.txt file], however since IsIgnoreRobotsDotTextIfRootDisallowedEnabled is set to true the robots.txt file will be ignored for this site.", pageToCrawl.Uri.AbsoluteUri);
-                    Log.Debug(message);
+                    var message = $"Page [{pageToCrawl.Uri.AbsoluteUri}] [Disallowed by robots.txt file], however since IsIgnoreRobotsDotTextIfRootDisallowedEnabled is set to true the robots.txt file will be ignored for this site.";
+                    _logger.Debug(message);
                     allowedByRobots = true;
                     _robotsDotText = null;
                 }
                 else if (!allPathsBelowRootAllowedByRobots)
                 {
-                    var message = string.Format("All Pages below [{0}] [Disallowed by robots.txt file], however since IsIgnoreRobotsDotTextIfRootDisallowedEnabled is set to true the robots.txt file will be ignored for this site.", pageToCrawl.Uri.AbsoluteUri);
-                    Log.Debug(message);
+                    var message = $"All Pages below [{pageToCrawl.Uri.AbsoluteUri}] [Disallowed by robots.txt file], however since IsIgnoreRobotsDotTextIfRootDisallowedEnabled is set to true the robots.txt file will be ignored for this site.";
+                    _logger.Debug(message);
                     allowedByRobots = true;
                     _robotsDotText = null;
                 }
@@ -138,8 +138,8 @@ namespace Abot2.Crawler
             }
             else if (!allowedByRobots)
             {
-                var message = string.Format("Page [{0}] not crawled, [Disallowed by robots.txt file], set IsRespectRobotsDotText=false in config file if you would like to ignore robots.txt files.", pageToCrawl.Uri.AbsoluteUri);
-                Log.Debug(message);
+                var message = $"Page [{pageToCrawl.Uri.AbsoluteUri}] not crawled, [Disallowed by robots.txt file], set IsRespectRobotsDotText=false in config file if you would like to ignore robots.txt files.";
+                _logger.Debug(message);
 
                 FirePageCrawlDisallowedEvent(pageToCrawl, message);
 
@@ -158,8 +158,8 @@ namespace Abot2.Crawler
             }
             catch (Exception e)
             {
-                Log.Error("An unhandled exception was thrown by a subscriber of the PageLinksCrawlDisallowed event for robots.txt");
-                Log.Error(e, "Exception details -->");
+                _logger.Error("An unhandled exception was thrown by a subscriber of the PageLinksCrawlDisallowed event for robots.txt");
+                _logger.Error(e);
             }
         }
     }

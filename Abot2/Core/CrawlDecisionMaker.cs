@@ -43,7 +43,7 @@ namespace Abot2.Core
                 return new CrawlDecision { Allow = false, Reason = "Null crawl context" };
 
             if (pageToCrawl.RedirectedFrom != null && pageToCrawl.RedirectPosition > crawlContext.CrawlConfiguration.HttpRequestMaxAutoRedirects)
-                return new CrawlDecision { Allow = false, Reason = string.Format("HttpRequestMaxAutoRedirects limit of [{0}] has been reached", crawlContext.CrawlConfiguration.HttpRequestMaxAutoRedirects) };
+                return new CrawlDecision { Allow = false, Reason = $"HttpRequestMaxAutoRedirects limit of [{crawlContext.CrawlConfiguration.HttpRequestMaxAutoRedirects}] has been reached" };
 
             if(pageToCrawl.CrawlDepth > crawlContext.CrawlConfiguration.MaxCrawlDepth)
                 return new CrawlDecision { Allow = false, Reason = "Crawl depth is above max" };
@@ -56,7 +56,7 @@ namespace Abot2.Core
                 crawlContext.CrawlConfiguration.MaxPagesToCrawl > 0 &&
                 crawlContext.CrawledCount + crawlContext.Scheduler.Count + 1 > crawlContext.CrawlConfiguration.MaxPagesToCrawl)
             {
-                return new CrawlDecision { Allow = false, Reason = string.Format("MaxPagesToCrawl limit of [{0}] has been reached", crawlContext.CrawlConfiguration.MaxPagesToCrawl) };
+                return new CrawlDecision { Allow = false, Reason = $"MaxPagesToCrawl limit of [{crawlContext.CrawlConfiguration.MaxPagesToCrawl}] has been reached" };
             }
 
             if (!pageToCrawl.IsRetry &&
@@ -65,7 +65,7 @@ namespace Abot2.Core
                 pagesCrawledInThisDomain > 0)
             {
                 if (pagesCrawledInThisDomain >= crawlContext.CrawlConfiguration.MaxPagesToCrawlPerDomain)
-                    return new CrawlDecision { Allow = false, Reason = string.Format("MaxPagesToCrawlPerDomain limit of [{0}] has been reached for domain [{1}]", crawlContext.CrawlConfiguration.MaxPagesToCrawlPerDomain, pageToCrawl.Uri.Authority) };
+                    return new CrawlDecision { Allow = false, Reason = $"MaxPagesToCrawlPerDomain limit of [{crawlContext.CrawlConfiguration.MaxPagesToCrawlPerDomain}] has been reached for domain [{pageToCrawl.Uri.Authority}]" };
             }
 
             if (!crawlContext.CrawlConfiguration.IsExternalPageCrawlingEnabled && !pageToCrawl.IsInternal)
@@ -128,7 +128,7 @@ namespace Abot2.Core
                 return new CrawlDecision { Allow = false, Reason = "Content type is not any of the following: " + string.Join(",", cleanDownloadableContentTypes) };
 
             if (crawlContext.CrawlConfiguration.MaxPageSizeInBytes > 0 && crawledPage.HttpResponseMessage.Content.Headers.ContentLength > crawlContext.CrawlConfiguration.MaxPageSizeInBytes)
-                return new CrawlDecision { Allow = false, Reason = string.Format("Page size of [{0}] bytes is above the max allowable of [{1}] bytes", crawledPage.HttpResponseMessage.Content.Headers.ContentLength, crawlContext.CrawlConfiguration.MaxPageSizeInBytes) };
+                return new CrawlDecision { Allow = false, Reason = $"Page size of [{crawledPage.HttpResponseMessage.Content.Headers.ContentLength}] bytes is above the max allowable of [{crawlContext.CrawlConfiguration.MaxPageSizeInBytes}] bytes" };
 
             return new CrawlDecision { Allow = true };            
         }

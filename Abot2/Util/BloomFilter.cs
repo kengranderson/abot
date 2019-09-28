@@ -79,13 +79,13 @@ namespace Abot2.Util
  
 			if (errorRate >= 1 || errorRate <= 0)
 			{
-				throw new ArgumentOutOfRangeException("errorRate", errorRate, string.Format("errorRate must be between 0 and 1, exclusive. Was {0}", errorRate));
+				throw new ArgumentOutOfRangeException("errorRate", errorRate, $"errorRate must be between 0 and 1, exclusive. Was {errorRate}");
 			}
  
 			// from overflow in bestM calculation
 			if (m < 1)
 			{
-				throw new ArgumentOutOfRangeException(string.Format("The provided capacity and errorRate values would result in an array of length > int.MaxValue. Please reduce either of these values. Capacity: {0}, Error rate: {1}", capacity, errorRate));
+				throw new ArgumentOutOfRangeException($"The provided capacity and errorRate values would result in an array of length > int.MaxValue. Please reduce either of these values. Capacity: {capacity}, Error rate: {errorRate}");
 			}
  
 			// set the secondary hash function

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using Serilog;
+using NLog;
 
 namespace Abot2.Util
 {
@@ -32,6 +32,7 @@ namespace Abot2.Util
 
     public abstract class ThreadManager : IThreadManager
     {
+        protected static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         protected bool _abortAllCalled = false;
         protected int _numberOfRunningThreads = 0;
         protected ManualResetEvent _resetEvent = new ManualResetEvent(true);
@@ -75,7 +76,7 @@ namespace Abot2.Util
                     if (!_isDisplosed && _numberOfRunningThreads >= MaxThreads)
                         _resetEvent.Reset();
 
-                    Log.Debug("Starting another thread, increasing running threads to [{0}].", _numberOfRunningThreads);
+                    _logger.Debug($"DoWork: Starting another thread, increasing running threads to {_numberOfRunningThreads}.");
                 }
                 RunActionOnDedicatedThread(action);
             }
@@ -87,6 +88,7 @@ namespace Abot2.Util
 
         public virtual void AbortAll()
         {
+            _logger.Debug("AbortAll called");
             _abortAllCalled = true;
             lock (_locker)
             {
@@ -114,16 +116,16 @@ namespace Abot2.Util
             try
             {
                 action.Invoke();
-                Log.Debug("Action completed successfully.");
+                _logger.Debug("RunAction completed successfully.");
             }
             catch (OperationCanceledException)
             {
-                Log.Debug("Thread cancelled.");
+                _logger.Debug("Thread cancelled.");
                 throw;
             }
             catch (Exception e)
             {
-                Log.Error("Error occurred while running action: {0}", e);
+                _logger.Error($"Error occurred while running action: {e}");
             }
             finally
             {
@@ -132,7 +134,7 @@ namespace Abot2.Util
                     lock (_locker)
                     {
                         _numberOfRunningThreads--;
-                        Log.Debug("[{0}] threads are running.", _numberOfRunningThreads);
+                        _logger.Debug($"Thread count decremented - {_numberOfRunningThreads} threads are running.");
                         if (!_isDisplosed && _numberOfRunningThreads < MaxThreads)
                             _resetEvent.Set();
                     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Serilog;
+using NLog;
 
 namespace Abot2.Core
 {
@@ -22,6 +22,7 @@ namespace Abot2.Core
 
     public class RobotsDotTextFinder : IRobotsDotTextFinder
     {
+        protected static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         readonly IPageRequester _pageRequester;
 
         public RobotsDotTextFinder(IPageRequester pageRequester)
@@ -41,11 +42,11 @@ namespace Abot2.Core
                 page.HttpResponseMessage == null || 
                 page.HttpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
-                Log.Debug("Did not find robots.txt file at [{0}]", robotsUri);
+                _logger.Debug($"Did not find robots.txt file at [{robotsUri}]");
                 return null;
             }
 
-            Log.Debug("Found robots.txt file at [{0}]", robotsUri);
+            _logger.Debug($"Found robots.txt file at [{robotsUri}]");
 
             return new RobotsDotText(rootUri, page.Content.Text);
         }

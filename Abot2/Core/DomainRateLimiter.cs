@@ -2,7 +2,7 @@ using Abot2.Util;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using Serilog;
+using NLog;
 
 namespace Abot2.Core
 {
@@ -34,6 +34,7 @@ namespace Abot2.Core
 
     public class DomainRateLimiter : IDomainRateLimiter
     {
+        protected static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         protected ConcurrentDictionary<string, IRateLimiter> _rateLimiterLookup = new ConcurrentDictionary<string, IRateLimiter>();
         readonly long _defaultMinCrawlDelayInMillisecs;
 
@@ -60,7 +61,7 @@ namespace Abot2.Core
             timer.Stop();
 
             if(timer.ElapsedMilliseconds > 10)
-                Log.Debug("Rate limited [{0}] [{1}] milliseconds", uri.AbsoluteUri, timer.ElapsedMilliseconds);
+                _logger.Debug($"Rate limited [{uri.AbsoluteUri}] [{timer.ElapsedMilliseconds}] milliseconds");
         }
 
         public void AddDomain(Uri uri, long minCrawlDelayInMillisecs)
@@ -88,7 +89,7 @@ namespace Abot2.Core
                 var rateLimiter = new RateLimiter(1, TimeSpan.FromMilliseconds(delayToUse));
 
                 _rateLimiterLookup.AddOrUpdate(uri.Authority, rateLimiter, (key, oldValue) => rateLimiter);
-                Log.Debug("Added/updated domain [{0}] with minCrawlDelayInMillisecs of [{1}] milliseconds", uri.Authority, delayToUse);
+                _logger.Debug($"Added/updated domain [{uri.Authority}] with minCrawlDelayInMillisecs of [{delayToUse}] milliseconds");
             }
         }
 
@@ -108,9 +109,9 @@ namespace Abot2.Core
                 rateLimiter = new RateLimiter(1, TimeSpan.FromMilliseconds(minCrawlDelayInMillisecs));
 
                 if (_rateLimiterLookup.TryAdd(uri.Authority, rateLimiter))
-                    Log.Debug("Added new domain [{0}] with minCrawlDelayInMillisecs of [{1}] milliseconds", uri.Authority, minCrawlDelayInMillisecs);
+                    _logger.Debug($"Added new domain [{uri.Authority}] with minCrawlDelayInMillisecs of [{minCrawlDelayInMillisecs}] milliseconds");
                 else
-                    Log.Warning("Unable to add new domain [{0}] with minCrawlDelayInMillisecs of [{1}] milliseconds", uri.Authority, minCrawlDelayInMillisecs);
+                    _logger.Warn($"Unable to add new domain [{uri.Authority}] with minCrawlDelayInMillisecs of [{minCrawlDelayInMillisecs}] milliseconds");
             }
 
             return rateLimiter;
