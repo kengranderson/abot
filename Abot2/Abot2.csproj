@@ -10,10 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.12.1" />
-    <PackageReference Include="NLog" Version="4.6.6" />
+    <PackageReference Include="AngleSharp" Version="0.13.0" />
+    <PackageReference Include="NLog" Version="4.6.7" />
     <PackageReference Include="NRobotsCore" Version="1.1.2" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
