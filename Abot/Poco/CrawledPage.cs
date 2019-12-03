@@ -3,8 +3,8 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using AngleSharp.Dom.Html;
-using AngleSharp.Parser.Html;
+using AngleSharp.Html.Parser;
+using AngleSharp.Html.Dom;
 
 namespace Abot.Poco
 {
@@ -131,11 +131,11 @@ namespace Abot.Poco
             IHtmlDocument document;
             try
             {
-                document = _angleSharpHtmlParser.Parse(Content.Text);
+                document = _angleSharpHtmlParser.ParseDocument(Content.Text);
             }
             catch (Exception e)
             {
-                document = _angleSharpHtmlParser.Parse("");
+                document = _angleSharpHtmlParser.ParseDocument("");
 
                 _logger.ErrorFormat("Error occurred while loading AngularSharp object for Url [{0}]", Uri);
                 _logger.Error(e);
